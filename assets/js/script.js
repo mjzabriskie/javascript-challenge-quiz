@@ -173,4 +173,103 @@ var questions = [
             {choice: "invisible", correct: false}
         ]
     },
+    {
+        question: "How to insert a comment that has more than one line?",
+        answers: [
+            {choice: "//This comment has<br>more than one line//", correct: false},
+            {choice: "<!--This comment has<br>more than one line-->", correct: false},
+            {choice: "/*This comment has<br>more than one line*/", correct: true},
+            {choice: "invisible", correct: false}
+        ]
+    },
+    {
+        question: "What is the correct way to write a JavaScript array?",
+        answers: [
+            {choice: "var colors = (1:'red', 2:'green', 3:'blue')", correct: false},
+            {choice: "var colors = 1 = ('red'), 2 = ('green'), 3 = ('blue')", correct: false},
+            {choice: "var colors = 'red', 'green', 'blue'", correct: false},
+            {choice: "var colors = ['red', 'green', 'blue']", correct: true}
+        ]
+    },
+    {
+        question: "How do you round the number 7.25, to the nearest integer?",
+        answers: [
+            {choice: "Math.round(7.25)", correct: true},
+            {choice: "round(7.25)", correct: false},
+            {choice: "rnd(7.25)", correct: false},
+            {choice: "Math.rnd(7.25)", correct: false}
+        ]
+    },
+    {
+        question: "What is the correct JavaScript syntax for opening a new window called 'w2' ?",
+        answers: [
+            {choice: "w2 = window.new('http://www.w3schools.com');", correct: false},
+            {choice: "w2 = window.open('http://www.w3schools.com');", correct: true},
+            {choice: "invisible", correct: false},
+            {choice: "invisible", correct: false}
+        ]
+    },
+    {
+        question: "JavaScript is the same as Java.",
+        answers: [
+            {choice: "True", correct: false},
+            {choice: "False", correct: true},
+            {choice: "invisible", correct: false},
+            {choice: "invisible", correct: false}
+        ]
+    },
+    {
+        question: "How can you detect the client's browser name?",
+        answers: [
+            {choice: "browser.name", correct: false},
+            {choice: "client.navName", correct: false},
+            {choice: "navigator.appName", correct: true},
+            {choice: "invisible", correct: false}
+        ]
+    },
+    {
+        question: "Which event occurs when the user clicks on an HTML element?",
+        answers: [
+            {choice: "onmouseclick", correct: false},
+            {choice: "onchange", correct: false},
+            {choice: "onmouseover", correct: false},
+            {choice: "onclick", correct: true}
+        ]
+    },
+    {
+        question: "How do you declare a JavaScript variable?",
+        answers: [
+            {choice: "variable carName;", correct: false},
+            {choice: "var carName;", correct: true},
+            {choice: "v carName;", correct: false},
+            {choice: "invisible", correct: false}
+        ]
+    },
+    {
+        question: "Which operator is used to assign a value to a variable?",
+        answers: [
+            {choice: "=", correct: true},
+            {choice: "x", correct: false},
+            {choice: "-", correct: false},
+            {choice: "*", correct: false}
+        ]
+    },
+    {
+        question: "What will the following code return: Boolean(10 > 9)",
+        answers: [
+            {choice: "true", correct: true},
+            {choice: "false", correct: false},
+            {choice: "NaN", correct: false},
+            {choice: "invisible", correct: false}
+        ]
+    },
+    {
+        question: "What will the following code return: Boolean(10 > 9)",
+        answers: [
+            {choice: "Yes", correct: true},
+            {choice: "No", correct: false},
+            {choice: "invisible", correct: false},
+            {choice: "invisible", correct: false}
+        ]
+    }
 ]
