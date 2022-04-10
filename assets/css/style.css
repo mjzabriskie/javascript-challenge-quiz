@@ -39,7 +39,7 @@ header h1 {
 .container {
     width: 800px;
     max-width: 80%;
-    background-color: bisque;
+    background-color: #a0c0c0;
     border-radius: 10px;
     padding: 10px;
     box-shadow: 0 0 10px 2px;
@@ -73,6 +73,12 @@ header h1 {
 
 .hide {
     display: none;
+}
+
+/* This class allows the unused buttons to be hidden, but stops the quiz card from
+ changing sizes like would happen with .hide */
+.invisible {
+    visibility: hidden;
 }
 
 /* .question {

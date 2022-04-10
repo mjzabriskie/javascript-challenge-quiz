@@ -1,5 +1,6 @@
 var startBtnEl = document.querySelector("#start-btn");
 var nextBtnEl = document.querySelector("#next-btn");
+var choice1BtnEl = document.querySelector(".choice");
 var questionContEl = document.querySelector("#question-container");
 var questionTxtEl = document.querySelector("#question");
 var questionAnswerEl = document.querySelector("#answer-buttons");
@@ -20,20 +21,30 @@ function nextQuestion(){
     questionTxtEl.innerHTML = questions[questionCount].question;
     for (i = 1; i <= 4; i++){
         var optionBtn = questionAnswerEl.querySelector(".btn:nth-child("+i+")");
-        var btnAnswer = questions[questionCount].answers[i-1].choice;
-        optionBtn.textContent = btnAnswer;//btnAnswer;//answers[i].choice;
-        console.log(btnAnswer);
-    }
+        var btnAnswer = questions[questionCount].answers[i-1];
 
+        optionBtn.textContent = btnAnswer.choice;
+        optionBtn.classList.add(btnAnswer.correct);
+        console.log(optionBtn.classList);
+        if(btnAnswer.choice == "invisible"){
+            optionBtn.classList.add(btnAnswer.choice);
+        }else{
+            if(optionBtn.classList.contains("invisible")){
+                optionBtn.classList.remove("invisible");
+            }
+        }
+    }
     questionCount++;
 }
 
-function chooseAnswer(){
+function chooseAnswer(event){
+    event.target.classList.add("hide");
 
 }
 
 startBtnEl.addEventListener('click', startQuiz);
 nextBtnEl.addEventListener('click', nextQuestion);
+questionAnswerEl.addEventListener('click', chooseAnswer);
 
 
 
@@ -48,7 +59,7 @@ var questions = [
         ]
     },
     {
-        question: "What is the correct JavaScript syntax to change the content of the HTML element below?<br><br><p id='demo'>This is a demonstration.</p>",
+        question: "What is the correct JavaScript syntax to change the content of the HTML element below?<br>&lt;p id='demo'&gt;This is a demonstration.&lt;/p&gt;",
         answers: [
             {choice: "document.getElementById('demo').innerHTML = 'Hello World!';", correct: true},
             {choice: "document.getElement('p').innerHTML = 'Hello World!';", correct: false},
@@ -79,8 +90,8 @@ var questions = [
         answers: [
             {choice: "True", correct: false},
             {choice: "False", correct: true},
-            {choice: "hide"},
-            {choice: "hide"}
+            {choice: "invisible", correct: false},
+            {choice: "invisible", correct: false}
         ]
     },
     {
@@ -98,7 +109,7 @@ var questions = [
             {choice: "function myFunction()", correct: true},
             {choice: "function:myFunction()", correct: false},
             {choice: "function = myFunction()", correct: false},
-            {choice: "hide"}
+            {choice: "invisible", correct: false}
         ]
     },
     {
@@ -107,7 +118,7 @@ var questions = [
             {choice: "myFunction()", correct: true},
             {choice: "call myFunction()", correct: false},
             {choice: "call function myFunction()", correct: false},
-            {choice: "hide"}
+            {choice: "invisible", correct: false}
         ]
     },
     {
@@ -125,7 +136,7 @@ var questions = [
             {choice: "while (i <= 10; i++)", correct: false},
             {choice: "while (i <= 10)", correct: true},
             {choice: "while i = 1 to 10", correct: false},
-            {choice: "hide"}
+            {choice: "invisible", correct: false}
         ]
     },
     {
@@ -143,7 +154,7 @@ var questions = [
             {choice: "'This is a comment", correct: false},
             {choice: "//This is a comment", correct: true},
             {choice: "<!--This is a comment-->", correct: false},
-            {choice: "hide"}
+            {choice: "invisible", correct: false}
         ]
     },
 ]
