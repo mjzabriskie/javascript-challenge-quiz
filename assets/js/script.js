@@ -4,6 +4,7 @@ var choice1BtnEl = document.querySelector(".choice");
 var questionContEl = document.querySelector("#question-container");
 var questionTxtEl = document.querySelector("#question");
 var questionAnswerEl = document.querySelector("#answer-buttons");
+var scoreCount = 0;
 
 
 
@@ -24,11 +25,21 @@ function nextQuestion(){
         var btnAnswer = questions[questionCount].answers[i-1];
 
         optionBtn.textContent = btnAnswer.choice;
+
+        //Removing leftover true class from previous questions
+        if(optionBtn.classList.contains("true")){
+            optionBtn.classList.remove("true");
+        }
+        //Removing leftover false class from previous questions
+        if(optionBtn.classList.contains("false")){
+            optionBtn.classList.remove("false");
+        }
+
         optionBtn.classList.add(btnAnswer.correct);
-        console.log(optionBtn.classList);
+
         if(btnAnswer.choice == "invisible"){
             optionBtn.classList.add(btnAnswer.choice);
-        }else{
+        }else{//Removing invisible when it's no longer needed.
             if(optionBtn.classList.contains("invisible")){
                 optionBtn.classList.remove("invisible");
             }
@@ -38,7 +49,12 @@ function nextQuestion(){
 }
 
 function chooseAnswer(event){
-    event.target.classList.add("hide");
+    if(event.target.classList.contains("true")){
+        console.log("Correct!");
+        scoreCount++;
+    } else {
+        console.log("Wrong!");
+    }
 
 }
 
