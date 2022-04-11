@@ -4,42 +4,68 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./assets/css/style.css">
     <title>JavaScript Challenge!</title>
 </head>
 
 <body>
-    <!-- <header>
-        <nav>
-            <h2>High Scores</h2>
-            <h2>Timer</h2>
-        </nav>
-        <h1>JavaScript Challenge!</h1>
-    </header> -->
-    <div class="container">
-        <h1>JavaScript Challenge!</h1>
-        <h2>JavaScript much? Let's find out!</h2>
-        <h3>Directions</h3>
-        <p>Click "Start Quiz" below to test your knowledge! But don't forget to keep an eye
-            on the timer. Incorrect answers will subtract 10 seconds from the clock.
-            After the game, be sure to enter your initials to save your high score!
-        </p>
+    <!-- This is the main card for the game -->
+    <section id="game-main" class="container">
+        <div class="navigate">
+            <p id="check-high-scores">High Scores</p>
+            <p id="time-remaining">Seconds remaining: 90</p>
+        </div>
+        <div class ="intro">
+            <h1>JavaScript Challenge!</h1>
+            <h2>JavaScript much? Let's find out!</h2>
+            <h3>Direction<span id ="god-mode">s</span></h3>
+            <p>Click "Start Quiz" below to test your knowledge! But don't forget to keep an eye
+                on the timer. Incorrect answers will subtract 10 seconds from the clock.
+                After the game, be sure to enter your initials to save your high score!
+            </p>
+        </div>
         <div id="question-container" class="hide">
-            <div id="question">This is a sample question?</div>
+            <div id="question"></div>
             <div id="answer-buttons" class="btn-grid">
-                <button class="btn choice">Option1</button>
-                <button class="btn choice">Option2</button>
-                <button class="btn choice">Option3</button>
-                <button class="btn choice">Option4</button>
+                <button class="btn choice"></button>
+                <button class="btn choice"></button>
+                <button class="btn choice"></button>
+                <button class="btn choice"></button>
             </div>
         </div>
+        <h2 id="feedback" class="hide"></h2>
         <div class="controls">
             <button id="start-btn" class="start-btn btn">Start Quiz</button>
-            <button id="next-btn" class="next-btn btn hide">Next</button>
+            <!-- <button id="next-btn" class="next-btn btn hide">Next</button> -->
         </div>
-    </div>
+    </section>
+    <!-- This is the card for the high scores -->
+    <section id = "game-scores" class="container hide">
+        <div>
+            <h1>High Scores</h1>
+            <h2>See the top five high scores listed below!</h2>
+            <ol>
+                <li>mjz</li>
+                <li>fjd</li>
+                <li>2fj</li>
+                <li>fjd</li>
+                <li>gfd</li>
+            </ol>
+        </div>
+        <form id="score-form" class="score-form" method="post">
+            <div class="form-group">
+                <h4>Congratulations, you're a high scorer!</h4>
+                <div class="data-entry">
+                    <input type="text" name="player-initials" placeholder="Enter initials"/>
+                    <button id="save-task" class="btn save-btn" >Save</button>
+                </div>
+            </div>
+        </form>
+        <div class="high-score-controls">
+            <button id="play-again-btn" class="play-again-btn btn">Play Again</button>
+        </div>
+    </section>
 
     <script src="./assets/js/script.js"></script>
 </body>

@@ -1,28 +1,64 @@
+var gameContainerEl = document.querySelector("#game-main");
+var scoreContainerEl = document.querySelector("#game-scores");
 var startBtnEl = document.querySelector("#start-btn");
-var nextBtnEl = document.querySelector("#next-btn");
-var choice1BtnEl = document.querySelector(".choice");
-var questionContEl = document.querySelector("#question-container");
+var timeEl = document.querySelector("#time-remaining");
+// var nextBtnEl = document.querySelector("#next-btn");
+var godMode = document.querySelector("#god-mode");
+var godModeSelected;
+var highScoresPEl = document.querySelector("#check-high-scores");
+var playAgainBtnEl = document.querySelector("#play-again-btn");
+var introEl = document.querySelector(".intro");
+var questionContainerEl = document.querySelector("#question-container");
 var questionTxtEl = document.querySelector("#question");
 var questionAnswerEl = document.querySelector("#answer-buttons");
+var scoreFormEl = document.querySelector("#score-form");
+var feedbackH2El = document.querySelector("#feedback");
+var highScorers = [];
 var scoreCount = 0;
-
-
-
-var randomQuestions;
 var questionCount = 0;
+var timeRemaining = 90;
+
+
+
+// Timer that counts down from 5
+function countdown() {
+    timeInterval = setInterval(function () {
+      if (timeRemaining >= 0) {
+        timeEl.textContent = "Seconds remaining: " + timeRemaining;
+        timeRemaining--;
+      } else {
+        // timeEl.textContent = '';
+        // Use `clearInterval()` to stop the timer
+        clearInterval(timeInterval);
+        // Call the `displayMessage()` function
+        endQuiz();
+      }
+    }, 1000);
+  }
 
 function startQuiz(){
     startBtnEl.classList.add("hide");
-    questionContEl.classList.remove("hide");
-    nextBtnEl.classList.remove("hide");
+    introEl.classList.add("hide");
+    highScoresPEl.classList.add("hide");
+    questionContainerEl.classList.remove("hide");
+    countdown();
     nextQuestion();
 }
 
 function nextQuestion(){
+    if(questionCount >= questions.length){
+        endQuiz();
+        return false;
+    }
+
+    feedbackH2El.classList.add("hide");
+
     questionTxtEl.innerHTML = questions[questionCount].question;
     for (i = 1; i <= 4; i++){
         var optionBtn = questionAnswerEl.querySelector(".btn:nth-child("+i+")");
         var btnAnswer = questions[questionCount].answers[i-1];
+
+        optionBtn.disabled = false;
 
         optionBtn.textContent = btnAnswer.choice;
 
@@ -34,8 +70,31 @@ function nextQuestion(){
         if(optionBtn.classList.contains("false")){
             optionBtn.classList.remove("false");
         }
+        //Removing leftover green class from previous questions
+        if(optionBtn.classList.contains("green")){
+            optionBtn.classList.remove("green");
+        }
+        if(feedbackH2El.classList.contains("green")){
+            feedbackH2El.classList.remove("green");
+        }
+        //Removing leftover red class from previous questions
+        if(optionBtn.classList.contains("red")){
+            optionBtn.classList.remove("red");
+        }
+        if(feedbackH2El.classList.contains("red")){
+            feedbackH2El.classList.remove("red");
+        }
 
         optionBtn.classList.add(btnAnswer.correct);
+
+        if(godModeSelected){
+            if (btnAnswer.correct){
+                optionBtn.classList.add("green");
+            } else {
+                optionBtn.classList.add("red");
+            }
+        }
+
 
         if(btnAnswer.choice == "invisible"){
             optionBtn.classList.add(btnAnswer.choice);
@@ -49,19 +108,87 @@ function nextQuestion(){
 }
 
 function chooseAnswer(event){
-    if(event.target.classList.contains("true")){
-        console.log("Correct!");
-        scoreCount++;
-    } else {
-        console.log("Wrong!");
+    for (i = 1; i <= 4; i++){
+        var optionBtn = questionAnswerEl.querySelector(".btn:nth-child("+i+")");
+        if(optionBtn.classList.contains("true")){
+            optionBtn.classList.add("green");
+        } else {
+            optionBtn.classList.add("red");
+        }
+        optionBtn.disabled = true;
     }
 
+    if(event.target.classList.contains("true")){
+        feedbackH2El.innerHTML = "CORRECT!";
+        feedbackH2El.classList.add("green");
+        scoreCount++;
+    } else {
+        feedbackH2El.innerHTML = "WRONG!";
+        feedbackH2El.classList.add("red");
+        timeRemaining -= 10;
+    }
+    feedbackH2El.classList.remove("hide");
+    setTimeout(nextQuestion, 2000);
 }
 
-startBtnEl.addEventListener('click', startQuiz);
-nextBtnEl.addEventListener('click', nextQuestion);
-questionAnswerEl.addEventListener('click', chooseAnswer);
+function responseFeedback(){
+    nextQuestion();
+}
 
+function endQuiz(){
+    if(timeRemaining > 0){
+        alert("Congratulations, you've finished the quiz!");
+    }else{
+        timeEl.textContent = "Seconds remaining: 0";
+        alert("You've run out of time!");
+    }
+    gameContainerEl.classList.add("hide");
+    scoreContainerEl.classList.remove("hide");
+}
+
+function saveTasks() {
+    localStorage.setItem("high-scorer", JSON.stringify(tasks));
+}
+
+function loadTasks() {
+    // get tasks from local storage
+    var savedTasks = localStorage.getItem("tasks");
+
+     if (!savedTasks) {
+        return false;
+     }
+
+     savedTasks = JSON.parse(savedTasks);
+
+     for (var i = 0; i < savedTasks.length; i++) {
+         createTaskEl(savedTasks[i]);
+     }
+}
+
+highScoresPEl.addEventListener("click", function(){
+    gameContainerEl.classList.add("hide");
+    scoreContainerEl.classList.remove("hide");
+});
+
+startBtnEl.addEventListener("click", startQuiz);
+//nextBtnEl.addEventListener("click", nextQuestion);
+questionAnswerEl.addEventListener("click", chooseAnswer);
+
+playAgainBtnEl.addEventListener("click", function(){
+    location.reload();
+});
+
+scoreFormEl.addEventListener("click", function(event){
+    event.preventDefault();
+})
+
+godMode.addEventListener("click", function(){
+    var decision = confirm("You found me! Activate GOD MODE?");
+    if(decision){
+        godModeSelected = true;
+    }
+    startQuiz();
+})
 
 
 var questions = [
@@ -87,8 +214,8 @@ var questions = [
         question: "Where is the correct place to insert a JavaScript?",
         answers: [
             {choice: "The <body> section", correct: false},
-            {choice: "Both the <head> section and the <body> section are correct", correct: true},
             {choice: "The <head> section", correct: false},
+            {choice: "Both the <head> section and the <body> section are correct", correct: true},
             {choice: "It connects automatically to the HTML document", correct: false}
         ]
     },
@@ -102,7 +229,7 @@ var questions = [
         ]
     },
     {
-        question: "The external JavaScript file must contain the <script> tag.",
+        question: "The external JavaScript file must contain the &ltscript&gt tag.",
         answers: [
             {choice: "True", correct: false},
             {choice: "False", correct: true},
@@ -264,7 +391,7 @@ var questions = [
         ]
     },
     {
-        question: "What will the following code return: Boolean(10 > 9)",
+        question: "Is JavaScript case-sensitive?",
         answers: [
             {choice: "Yes", correct: true},
             {choice: "No", correct: false},
