@@ -9,16 +9,19 @@ var questionContainerEl = document.querySelector("#question-container");
 var questionTxtEl = document.querySelector("#question");
 var questionAnswerEl = document.querySelector("#answer-buttons");
 var feedbackH2El = document.querySelector("#feedback");
+var scoreBoardEl = document.querySelector("#score-board");
 var scoreContainerEl = document.querySelector("#game-scores");
 var scoreListEl = document.querySelector("#score-list");
+var scoreFormEl = document.querySelector("#score-form");
 var yourScore = document.querySelector("#your-score");
+var scoreText = document.querySelector("#score-text");
 var saveBtn = document.querySelector("#save-score");
-var playAgainBtnEl = document.querySelector("#play-again-btn");
+var playAgainBtnEl = document.querySelector("#play-again");
 var getPlayerInit = document.querySelector("input[name='player-initials']");
 var highScorers = [];
 var scoreCount = 0;
 var questionCount = 0;
-var timeRemaining = 90;
+var timeRemaining = 10;
 //Stops timer if player finishes before time runs out. See function countdown();
 var gameFinished;
 
@@ -149,11 +152,11 @@ function endQuiz() {
         gameFinished = true;
     } else {
         timeRemaining = 0;
-        //timeEl.textContent = "Seconds remaining: 0";
         alert("You've run out of time!");
     }
     gameContainerEl.classList.add("hide");
     scoreContainerEl.classList.remove("hide");
+    scoreText.innerHTML = "You scored " + scoreCount + " points!";
 }
 
 function saveScore() {
@@ -162,26 +165,33 @@ function saveScore() {
 
 function loadScores() {
     var savedScores = localStorage.getItem("high-scorer");
-
     if (!savedScores) {
         return false;
     }
 
     savedScores = JSON.parse(savedScores);
 
-    for (var i = 0; i < savedScores.length; i++) {
-        var scoreItemEl = document.createElement("li");
-        scoreItemEl.textContent = savedScores[i].initials + " Score: " + scoreCount + " points";
-        scoreListEl.append(scoreItemEl);
+    highScorers = savedScores;
 
-        //createEl(savedTasks[i]);
+    for (var i = 0; i < savedScores.length; i++) {
+        if(i > 4){
+            return false;
+       } else {
+            var scoreItemEl = document.createElement("li");
+            scoreItemEl.textContent = savedScores[i].initials + " Score: " + scoreCount + " points";
+            scoreListEl.append(scoreItemEl);
+       }
     }
 }
+
 loadScores();
 
 highScoresPEl.addEventListener("click", function () {
     gameContainerEl.classList.add("hide");
     scoreContainerEl.classList.remove("hide");
+    scoreBoardEl.classList.remove("hide");
+    scoreFormEl.classList.add("invisible");
+    console.log(scoreFormEl.classList);
 });
 
 startBtnEl.addEventListener("click", startQuiz);
@@ -196,6 +206,11 @@ saveBtn.addEventListener("click", function () {
     if(!getPlayerInit.value){
         alert("Please enter your initials!");
     } else {
+
+        var scoreItemEl = document.createElement("li");
+        scoreItemEl.textContent = getPlayerInit.value.toUpperCase() + " Score: " + scoreCount + " points";
+        scoreListEl.append(scoreItemEl);
+
         var playerInit = getPlayerInit.value.toUpperCase();
         var scoreDataObj = {
             initials: playerInit,
@@ -203,6 +218,9 @@ saveBtn.addEventListener("click", function () {
         };
         highScorers.push(scoreDataObj);
         saveScore();
+        scoreBoardEl.classList.remove("hide");
+        scoreFormEl.classList.add("invisible");
+        //loadScores();
     }
 });
 
