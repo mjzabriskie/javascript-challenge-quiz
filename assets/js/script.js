@@ -169,13 +169,13 @@ function loadScores() {
 
     savedScores = JSON.parse(savedScores);
 
-    // for (var i = 0; i < savedScores.length; i++) {
-    //     var scoreItemEl = document.createElement("li");
-    //     scoreItemEl.textContent = savedScores[i].initials + " Score: " + scoreCount + " points";
-    //     scoreListEl.append(scoreItemEl);
+    for (var i = 0; i < savedScores.length; i++) {
+        var scoreItemEl = document.createElement("li");
+        scoreItemEl.textContent = savedScores[i].initials + " Score: " + scoreCount + " points";
+        scoreListEl.append(scoreItemEl);
 
-    //     //createEl(savedTasks[i]);
-    // }
+        //createEl(savedTasks[i]);
+    }
 }
 loadScores();
 
