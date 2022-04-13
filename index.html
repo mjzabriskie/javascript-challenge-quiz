@@ -17,7 +17,7 @@
             <p id="your-score" class="hide"></p>
             <p id="time-remaining" class="hide">Seconds remaining: 90</p>
         </div>
-        <div class ="intro">
+        <div id="intro" class ="intro">
             <h1>JavaScript Challenge!</h1>
             <h2>JavaScript much? Let's find out!</h2>
             <h3>Direction<span id ="god-mode">s</span></h3>
@@ -43,27 +43,21 @@
     </section>
     <!-- This is the card for the high scores -->
     <section id = "game-scores" class="container hide">
-        <div>
+        <div id="score-board">
             <h1>High Scores</h1>
             <h2>See the top five high scores listed below!</h2>
-            <ol>
-                <li>mjz</li>
-                <li>fjd</li>
-                <li>2fj</li>
-                <li>fjd</li>
-                <li>gfd</li>
-            </ol>
+            <ol id="score-list" class="score-list"></ol>
         </div>
-        <form id="score-form" class="score-form" method="post">
+        <div id="score-form" class="score-form" method="post">
             <div class="form-group">
                 <h4>Congratulations, you're a high scorer!</h4>
                 <div class="data-entry">
                     <input type="text" name="player-initials" placeholder="Enter initials"/>
-                    <button id="save-task" class="btn save-btn" >Save</button>
+                    <button id="save-score" class="btn save-btn" >Save</button>
                 </div>
             </div>
-        </form>
-        <div class="high-score-controls">
+        </div>
+        <div class="play-again">
             <button id="play-again-btn" class="play-again-btn btn">Play Again</button>
         </div>
     </section>

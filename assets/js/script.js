@@ -1,21 +1,22 @@
 var gameContainerEl = document.querySelector("#game-main");
-var scoreContainerEl = document.querySelector("#game-scores");
 var startBtnEl = document.querySelector("#start-btn");
 var timeEl = document.querySelector("#time-remaining");
-// var nextBtnEl = document.querySelector("#next-btn");
 var godMode = document.querySelector("#god-mode");
 var godModeSelected;
 var highScoresPEl = document.querySelector("#check-high-scores");
-var playAgainBtnEl = document.querySelector("#play-again-btn");
-var introEl = document.querySelector(".intro");
+var introEl = document.querySelector("#intro");
 var questionContainerEl = document.querySelector("#question-container");
 var questionTxtEl = document.querySelector("#question");
 var questionAnswerEl = document.querySelector("#answer-buttons");
-var scoreFormEl = document.querySelector("#score-form");
 var feedbackH2El = document.querySelector("#feedback");
+var scoreContainerEl = document.querySelector("#game-scores");
+var scoreListEl = document.querySelector("#score-list");
+var yourScore = document.querySelector("#your-score");
+var saveBtn = document.querySelector("#save-score");
+var playAgainBtnEl = document.querySelector("#play-again-btn");
+var getPlayerInit = document.querySelector("input[name='player-initials']");
 var highScorers = [];
 var scoreCount = 0;
-var yourScore = document.querySelector("#your-score");
 var questionCount = 0;
 var timeRemaining = 90;
 //Stops timer if player finishes before time runs out. See function countdown();
@@ -23,7 +24,8 @@ var gameFinished;
 
 
 
-// Timer that counts down from 5
+
+// Counts down from 90 seconds
 function countdown() {
     timeInterval = setInterval(function () {
         if (gameFinished) {
@@ -146,31 +148,36 @@ function endQuiz() {
         alert("Congratulations, you've finished the quiz!");
         gameFinished = true;
     } else {
-        timeEl.textContent = "Seconds remaining: 0";
+        timeRemaining = 0;
+        //timeEl.textContent = "Seconds remaining: 0";
         alert("You've run out of time!");
     }
     gameContainerEl.classList.add("hide");
     scoreContainerEl.classList.remove("hide");
 }
 
-function saveTasks() {
-    localStorage.setItem("high-scorer", JSON.stringify(tasks));
+function saveScore() {
+    localStorage.setItem("high-scorer", JSON.stringify(highScorers));
 }
 
-function loadTasks() {
-    // get tasks from local storage
-    var savedTasks = localStorage.getItem("tasks");
+function loadScores() {
+    var savedScores = localStorage.getItem("high-scorer");
 
-    if (!savedTasks) {
+    if (!savedScores) {
         return false;
     }
 
-    savedTasks = JSON.parse(savedTasks);
+    savedScores = JSON.parse(savedScores);
 
-    for (var i = 0; i < savedTasks.length; i++) {
-        createTaskEl(savedTasks[i]);
-    }
+    // for (var i = 0; i < savedScores.length; i++) {
+    //     var scoreItemEl = document.createElement("li");
+    //     scoreItemEl.textContent = savedScores[i].initials + " Score: " + scoreCount + " points";
+    //     scoreListEl.append(scoreItemEl);
+
+    //     //createEl(savedTasks[i]);
+    // }
 }
+loadScores();
 
 highScoresPEl.addEventListener("click", function () {
     gameContainerEl.classList.add("hide");
@@ -185,9 +192,19 @@ playAgainBtnEl.addEventListener("click", function () {
     location.reload();
 });
 
-scoreFormEl.addEventListener("click", function (event) {
-    event.preventDefault();
-})
+saveBtn.addEventListener("click", function () {
+    if(!getPlayerInit.value){
+        alert("Please enter your initials!");
+    } else {
+        var playerInit = getPlayerInit.value.toUpperCase();
+        var scoreDataObj = {
+            initials: playerInit,
+            score: scoreCount
+        };
+        highScorers.push(scoreDataObj);
+        saveScore();
+    }
+});
 
 godMode.addEventListener("click", function () {
     var decision = confirm("You found me! Activate GOD MODE?");
