@@ -1,8 +1,10 @@
+//questions array located at the bottom of the script for readability
+//purposes.
+
 var gameContainerEl = document.querySelector("#game-main");
 var startBtnEl = document.querySelector("#start-btn");
 var timeEl = document.querySelector("#time-remaining");
 var godMode = document.querySelector("#god-mode");
-var godModeSelected;
 var highScoresPEl = document.querySelector("#check-high-scores");
 var introEl = document.querySelector("#intro");
 var questionContainerEl = document.querySelector("#question-container");
@@ -10,20 +12,24 @@ var questionTxtEl = document.querySelector("#question");
 var questionAnswerEl = document.querySelector("#answer-buttons");
 var feedbackH2El = document.querySelector("#feedback");
 var scoreBoardEl = document.querySelector("#score-board");
+var topFiveEl = document.querySelector("#top-five");
+var congratsEl = document.querySelector("#congrats");
 var scoreContainerEl = document.querySelector("#game-scores");
 var scoreListEl = document.querySelector("#score-list");
 var scoreFormEl = document.querySelector("#score-form");
-var yourScore = document.querySelector("#your-score");
-var scoreText = document.querySelector("#score-text");
-var saveBtn = document.querySelector("#save-score");
+var yourScoreEl = document.querySelector("#your-score");
+var scoreTextEl = document.querySelector("#score-text");
+var saveBtnEl = document.querySelector("#save-score");
 var playAgainBtnEl = document.querySelector("#play-again");
 var getPlayerInit = document.querySelector("input[name='player-initials']");
 var highScorers = [];
 var scoreCount = 0;
 var questionCount = 0;
-var timeRemaining = 10;
+var timeRemaining = 90;
 //Stops timer if player finishes before time runs out. See function countdown();
 var gameFinished;
+//Checks to see if god mode has been selected.
+var godModeSelected;
 
 
 
@@ -43,24 +49,27 @@ function countdown() {
     }, 1000);
 }
 
+//Hides and shows all applicable elements, starts countdown
+//and serves up first question.
 function startQuiz() {
     startBtnEl.classList.add("hide");
     introEl.classList.add("hide");
     highScoresPEl.classList.add("hide");
     questionContainerEl.classList.remove("hide");
-    yourScore.classList.remove("hide");
+    yourScoreEl.classList.remove("hide");
     timeEl.classList.remove("hide");
     countdown();
     nextQuestion();
 }
 
-function nextQuestion() {
+
+function nextQuestion() {//serves up each question
     if (questionCount >= questions.length) {
         endQuiz();
         return false;
     }
 
-    yourScore.textContent = "Your score: " + scoreCount;
+    yourScoreEl.textContent = "Your score: " + scoreCount;
 
     feedbackH2El.classList.add("hide");
 
@@ -69,6 +78,8 @@ function nextQuestion() {
         var optionBtn = questionAnswerEl.querySelector(".btn:nth-child(" + i + ")");
         var btnAnswer = questions[questionCount].answers[i - 1];
 
+        //Re-enabling answer buttons after they are disabled
+        //upon answer selection. See function chooseAnswer().
         optionBtn.disabled = false;
 
         optionBtn.textContent = btnAnswer.choice;
@@ -106,7 +117,7 @@ function nextQuestion() {
             }
         }
 
-
+        //Used .invisible instead of .hide to make box size more uniform
         if (btnAnswer.choice == "invisible") {
             optionBtn.classList.add(btnAnswer.choice);
         } else {//Removing invisible when it's no longer needed.
@@ -126,24 +137,25 @@ function chooseAnswer(event) {
         } else {
             optionBtn.classList.add("red");
         }
+        //Players could click multiple times and get points if not
+        //disabled.
         optionBtn.disabled = true;
     }
 
+        //Feedback for right or wrong answers
     if (event.target.classList.contains("true")) {
         feedbackH2El.innerHTML = "CORRECT!";
         feedbackH2El.classList.add("green");
-        yourScore.textContent = "Your score: " + (scoreCount += 5);
+        yourScoreEl.textContent = "Your score: " + (scoreCount += 5);
     } else {
         feedbackH2El.innerHTML = "WRONG!";
         feedbackH2El.classList.add("red");
         timeRemaining -= 10;
     }
     feedbackH2El.classList.remove("hide");
-    setTimeout(nextQuestion, 2000);
-}
 
-function responseFeedback() {
-    nextQuestion();
+    //Instead of a next button, set a time delay to move between questions.
+    setTimeout(nextQuestion, 2000);
 }
 
 function endQuiz() {
@@ -156,7 +168,42 @@ function endQuiz() {
     }
     gameContainerEl.classList.add("hide");
     scoreContainerEl.classList.remove("hide");
-    scoreText.innerHTML = "You scored " + scoreCount + " points!";
+    scoreTextEl.innerHTML = "You scored " + scoreCount + " points!";
+
+    //leaves high score form visible if no previous scores have been
+    //recorded, and the score isn't 0.
+    if(highScorers.length === 0 && scoreCount !== 0){
+        return true;
+    }
+
+    //loops through to check current score against each high score
+    for (var i = 0; i < highScorers.length; i++){
+        if (i > 4){
+            //High scores limited to 5, exits function if no room
+            //for another high score, hides save score form.
+            congratsEl.classList.add("hide");
+            congratsEl.classList.remove("form-group");
+            return false;
+        }else{
+            //leaves save score form visible if score is higher than
+            //one of the other scores, but doesn't allow a score of
+            //zero, even if there's room in the top 5 scores.
+            if(scoreCount > highScorers[i].score && scoreCount != 0){
+                return true;
+            }
+        }
+    }
+
+    //Allows score to be saved if not higher than a score already on
+    //the board when there are less than 5 scores available.
+    //Zero is not an accepted score.
+    if(highScorers.length < 5 && scoreCount !== 0){
+        return true;
+    }else{
+        congratsEl.classList.add("hide");
+        congratsEl.classList.remove("form-group");
+        return false;
+    }
 }
 
 function saveScore() {
@@ -166,6 +213,7 @@ function saveScore() {
 function loadScores() {
     var savedScores = localStorage.getItem("high-scorer");
     if (!savedScores) {
+        topFiveEl.textContent = "No high scores yet; go get 'em!"
         return false;
     }
 
@@ -173,12 +221,16 @@ function loadScores() {
 
     highScorers = savedScores;
 
-    for (var i = 0; i < savedScores.length; i++) {
-        if(i > 4){
+    //sorts highScorers array by value of score in each object in descending order.
+    highScorers.sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
+
+    //loops through array objects to create elements for top 5 scores.
+    for (var i = 0; i < highScorers.length; i++) {
+        if(i > 4){//stops more than 5 scores being written to scoreboard
             return false;
        } else {
             var scoreItemEl = document.createElement("li");
-            scoreItemEl.textContent = savedScores[i].initials + " Score: " + scoreCount + " points";
+            scoreItemEl.textContent = highScorers[i].initials + "\xa0\xa0\xa0\xa0\xa0Score: " + highScorers[i].score + " points";
             scoreListEl.append(scoreItemEl);
        }
     }
@@ -186,44 +238,46 @@ function loadScores() {
 
 loadScores();
 
+//Lets user view highscore list by hiding/showing certain elements.
 highScoresPEl.addEventListener("click", function () {
     gameContainerEl.classList.add("hide");
     scoreContainerEl.classList.remove("hide");
     scoreBoardEl.classList.remove("hide");
-    scoreFormEl.classList.add("invisible");
-    console.log(scoreFormEl.classList);
+    scoreFormEl.classList.add("hide");
 });
 
 startBtnEl.addEventListener("click", startQuiz);
-//nextBtnEl.addEventListener("click", nextQuestion);
 questionAnswerEl.addEventListener("click", chooseAnswer);
-
 playAgainBtnEl.addEventListener("click", function () {
     location.reload();
 });
-
-saveBtn.addEventListener("click", function () {
-    if(!getPlayerInit.value){
+saveBtnEl.addEventListener("click", function () {
+    if(!getPlayerInit.value){//doesn't allow empty field to be submitted
         alert("Please enter your initials!");
-    } else {
-
-        var scoreItemEl = document.createElement("li");
-        scoreItemEl.textContent = getPlayerInit.value.toUpperCase() + " Score: " + scoreCount + " points";
-        scoreListEl.append(scoreItemEl);
-
+    } else {//puts player score and initials into object which is then
+        //pushed into the highScorers array.
         var playerInit = getPlayerInit.value.toUpperCase();
         var scoreDataObj = {
             initials: playerInit,
             score: scoreCount
         };
         highScorers.push(scoreDataObj);
+        //empties out score list from the scores that were loaded on
+        //initialize, and populates a new list with the new high score.
+        scoreListEl.innerHTML = "";
+        if(topFiveEl.textContent == "No high scores yet; go get 'em!"){
+            topFiveEl.textContent = "See the top five high scores listed below!";
+        }
         saveScore();
+        loadScores();
+        //hides save score form after submit.
         scoreBoardEl.classList.remove("hide");
-        scoreFormEl.classList.add("invisible");
-        //loadScores();
+        scoreFormEl.classList.add("hide");
+        scoreFormEl.classList.remove("score-form");
     }
 });
 
+//for an extra boost
 godMode.addEventListener("click", function () {
     var decision = confirm("You found me! Activate GOD MODE?");
     if (decision) {
@@ -232,7 +286,7 @@ godMode.addEventListener("click", function () {
     }
 })
 
-
+//Quiz questions are from the W3 schools javascript quiz.
 var questions = [
     {
         question: "Inside which HTML element do we put the JavaScript?",

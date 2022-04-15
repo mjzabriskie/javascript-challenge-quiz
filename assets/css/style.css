@@ -1,15 +1,20 @@
-*, *::before, *::after {
+:root {
+    --primary-color: #a0c0c0;
+    --secondary-color: #add8e6;
+    --tertiary-color: #a1c9d7;
+    --quaternary-color: #307530;
+    --quinary-color: #972c2c;
+  }
+
+* {
     box-sizing: border-box;
-    /* outline: 1px solid red; */
 }
-
-
 
 body {
     margin: 0;
     padding: 0;
     font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
+        "Lucida Sans", Arial, sans-serif;
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -17,29 +22,11 @@ body {
     align-items: center;
 }
 
-/* header {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
-}
-
-header nav {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    justify-content: space-between;
-    padding: 10px;
-}
-
-header h1 {
-    font-size: 4rem;
-} */
-
+/*styles the main card on the landing page*/
 .container {
     width: 800px;
     max-width: 80%;
-    background-color: #a0c0c0;
+    background-color: var(--primary-color);
     border-radius: 10px;
     padding: 10px;
     box-shadow: 0 0 10px 2px;
@@ -47,6 +34,7 @@ header h1 {
     flex-direction: column;
     align-items: center;
 }
+
 .navigate {
     display: flex;
     flex-wrap: wrap;
@@ -54,6 +42,7 @@ header h1 {
     margin: 10px 5px;
     justify-content: space-between;
 }
+
 .intro {
     display: flex;
     flex-direction: column;
@@ -65,7 +54,11 @@ header h1 {
     color: black;
 }
 
-.container h1, .container h2, .container h3, .container p, #question {
+.container h1,
+.container h2,
+.container h3,
+.container p,
+#question {
     text-align: center;
 }
 
@@ -93,6 +86,7 @@ header h1 {
 #question {
     font-size: 24px;
 }
+
 .btn-grid {
     display: grid;
     grid-template-columns: repeat(2, auto);
@@ -103,21 +97,24 @@ header h1 {
 .btn {
     border: 1px solid black;
     border-radius: 5px;
-    background-color: lightblue;
+    background-color: var(--secondary-color);
     padding: 15px 10px;
     font-size: 18px;
 }
 
 .btn:hover {
-    background-color: rgb(161, 201, 215);
+    background-color: var(--tertiary-color);
     cursor: pointer;
 }
 
+/*Buttons are made to look like normal, but be disabled.*/
 .btn:disabled {
     color: black;
 }
 
-.start-btn, .next-btn, .play-again-btn {
+.start-btn,
+.next-btn,
+.play-again-btn {
     font-size: 1.5rem;
     font-weight: bold;
     padding: 20px;
@@ -129,19 +126,13 @@ header h1 {
     align-items: center;
 }
 
-
-.hide {
-    display: none;
-}
-
 /* This class allows the unused buttons to be hidden, but stops the quiz card from
  changing sizes like would happen with .hide */
 .invisible {
     visibility: hidden;
 }
 
-/* The following styles are for high-score.html */
-
+/* The following styles are for the high score card */
 li {
     font-size: 1.5rem;
 }
@@ -162,7 +153,7 @@ li {
     font-size: 2rem;
 }
 
-.form-group div {
+.form-group {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -176,6 +167,26 @@ li {
 
 .data-entry {
     margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.congrats {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+
+}
+
+.congrats input {
+    min-width: 40%;
+}
+
+.congrats p {
+    cursor: auto;
+    font-size: 24px;
+    padding-bottom: 15px;
 }
 
 .score-form input {
@@ -185,20 +196,29 @@ li {
     font-size: 1.7rem;
     border: 2px solid grey;
     border-radius: 5px;
-  }
+}
 
-  .green {
-    background-color: rgb(48, 117, 48);
-  }
+/* the following are utility classes*/
+.hide {
+    display: none;
+}
 
-  .green:hover {
-    background-color: rgb(48, 117, 48);
-  }
+.green {
+    background-color: var(--quaternary-color);
+}
 
-  .red {
-    background-color: rgb(151, 44, 44);
-  }
+/*Overrides the normal hover color for buttons to make god mode
+  a better experience*/
+.green:hover {
+    background-color: var(--quaternary-color);
+}
 
-  .red:hover {
-    background-color: rgb(151, 44, 44);
-  }
+.red {
+    background-color: var(--quinary-color);
+}
+
+/*Overrides the normal hover color for buttons to make god mode
+  a better experience*/
+.red:hover {
+    background-color: var(--quinary-color);
+}
