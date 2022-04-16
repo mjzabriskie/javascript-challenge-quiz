@@ -20,4 +20,4 @@ This is a quiz to test your knowledge on some of the basics of JavaScript. This 
 <a href = "https://github.com/mjzabriskie/javascript-challenge-quiz">https://github.com/mjzabriskie/javascript-challenge-quiz</a>
 
 ## Screenshot
-![Screenshot of JavaScript Challenge! website](/javascript-challenge-quiz/assets/images/javascript-challenge-screenshot.png)
+![Screenshot of JavaScript Challenge! website](./assets/images/javascript-challenge-screenshot.png)
